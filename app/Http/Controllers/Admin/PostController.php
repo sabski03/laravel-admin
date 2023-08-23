@@ -39,7 +39,7 @@ class PostController extends Controller
 
         $post->save();
 
-        return redirect('admin/posts')->with('message', 'Post Added Successfully');
+        return redirect('admin/post')->with('message', 'Post Added Successfully');
 
     }
 
@@ -66,7 +66,7 @@ class PostController extends Controller
 
         $post->update();
 
-        return redirect('admin/posts')->with('message', 'Post Updated Successfully');
+        return redirect('admin/post')->with('message', 'Post Updated Successfully');
     }
 
     public function destroy($post_id){
