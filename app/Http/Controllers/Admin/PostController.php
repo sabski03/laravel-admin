@@ -73,7 +73,7 @@ class PostController extends Controller
         $post = Post::find($post_id);
         $post->delete();
 
-        return redirect('admin/posts')->with('message', 'Post Deleted Successfully');
+        return redirect('admin/post')->with('message', 'Post Deleted Successfully');
 
     }
 }
