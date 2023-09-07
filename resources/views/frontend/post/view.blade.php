@@ -13,16 +13,51 @@
                         <h4>{!! $post->name !!}</h4>
                     </div>
 
-{{--                    <div class="mt-3">--}}
-{{--                        <h6>{{ $post->category->name . ' / ' . $post->name }}</h6>--}}
-{{--                    </div>--}}
 
                     <div class="card card-shadow mt-4">
                         <div class="card-body">
                             {!! $post->description !!}
                         </div>
                     </div>
+
+
+                    <div class="comment-are mt-4">
+
+                        @if(session('message'))
+                            <h6 class="alert alert-warning mb-3">{{ session('message') }}</h6>
+                        @endif
+
+                        <div class="card card-body">
+                            <h6 class="card-title">Leave A Comment</h6>
+                            <form action="{{ url('comments') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="post_slug" value="{{ $post->slug }}">
+                                <textarea name="comment_body" class="form-control" rows="3" required></textarea>
+                                <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                            </form>
+                        </div>
+
+                        <div class="card card-body shadow-sm mt-3">
+                            <div class="detail-area">
+                                <h6 class="user-name mb-1">
+                                    User One
+                                    <small class="ms-3 text-primary">Commented on: 07-09-2023</small>
+                                </h6>
+                                <p class="user-coment mb-1">
+                                    whatever laravel is I will learn everything about it
+                                    and be a successful developer ofc c:
+                                </p>
+                            </div>
+                            <div>
+                                <a href="" class="btn btn-primary btn-sm me-2">Edit</a>
+                                <a href="" class="btn btn-danger btn-sm me-2">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div>
+
 
                 <div class="col-md-4">
                     <div class="border p-2 my-2">
