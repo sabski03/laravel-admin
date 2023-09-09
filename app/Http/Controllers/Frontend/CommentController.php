@@ -36,4 +36,41 @@ class CommentController extends Controller
             return redirect('login')->with('message', 'You Have To Login Before Leaving A Comment');
         }
     }
+
+    public function destroy(Request $request){
+
+        if(Auth::check()) {
+
+            if (Auth::user()->id == 1) {
+                // User with id 1 (admin) can delete any comments
+                $comment = Comment::find($request->comment_id);
+            } else {
+                // For non-admin users check if the comment belongs to them
+                $comment = Comment::where('id', $request->comment_id)
+                    ->where('user_id', Auth::user()->id)
+                    ->first();
+            }
+
+            if($comment){
+                $comment->delete();
+                return response()->json([
+                    'status' => 200,
+                    'message' => 'Comment Deleted Successfully'
+                ]);
+            }else{
+                return response()->json([
+                    'status' => 500,
+                    'message' => 'Something Went Wrong'
+                ]);
+            }
+
+
+
+        }else{
+            return response()->json([
+                'status' => 401,
+                'message' => 'Login to Delete this comment'
+            ]);
+        }
+    }
 }

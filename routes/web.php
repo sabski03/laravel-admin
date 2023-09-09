@@ -16,6 +16,7 @@ Route::get('/tutorial/{category_slug}/{post_slug}', [App\Http\Controllers\Fronte
 
 //comments status
 Route::post('comments', [App\Http\Controllers\Frontend\CommentController::class, 'store']);
+Route::post('delete-comment', [App\Http\Controllers\Frontend\CommentController::class, 'destroy']);
 
 
 

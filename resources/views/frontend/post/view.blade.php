@@ -36,23 +36,33 @@
                                 <button type="submit" class="btn btn-primary mt-3">Submit</button>
                             </form>
                         </div>
+                        @forelse($post->comments as $comment)
 
-                        <div class="card card-body shadow-sm mt-3">
+                        <div class="comment-container card card-body shadow-sm mt-3">
                             <div class="detail-area">
                                 <h6 class="user-name mb-1">
-                                    User One
-                                    <small class="ms-3 text-primary">Commented on: 07-09-2023</small>
+                                    @if ($comment->user)
+                                        {{ $comment->user->name }}
+                                    @endif
+                                    <small class="ms-3 text-primary">Commented On : {{ $comment->created_at->format('d-m-Y') }}</small>
                                 </h6>
                                 <p class="user-coment mb-1">
-                                    whatever laravel is I will learn everything about it
-                                    and be a successful developer ofc c:
+                                    {!! $comment->comment_body !!}
                                 </p>
                             </div>
+                            @if( Auth::check() && Auth::id() == $comment->user->id || Auth::id() == 1)
                             <div>
-                                <a href="" class="btn btn-primary btn-sm me-2">Edit</a>
-                                <a href="" class="btn btn-danger btn-sm me-2">Delete</a>
+                                <button type="button" value="{{ $comment->id }}" class="deleteComment btn btn-danger btn-sm me-2 float-end">Delete</button>
+                                <a href="" class="btn btn-primary btn-sm me-2 float-end">Edit</a>
                             </div>
+                            @endif
                         </div>
+
+                            @empty
+                            <div class="card card-body shadow-sm mt-3">
+                                <h6>No Comments Found</h6>
+                            </div>
+                            @endforelse
                     </div>
 
 
@@ -91,5 +101,45 @@
             </div>
         </div>
     </div>
+
+@endsection
+
+@section('scripts')
+
+    <script>
+        $(document).ready(function (){
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $(document).on('click', '.deleteComment', function(){
+
+                if(confirm('Are you sure you want to delete this comment?')){
+                    var thisClicked = $(this);
+                    var comment_id = thisClicked.val();
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/delete-comment",
+                        data: {
+                            'comment_id': comment_id,
+                        },
+                        success: function (res){
+                            if(res.status == 200){
+                                thisClicked.closest('.comment-container').remove();
+                                alert(res.message);
+                            }else{
+                                alert(res.message);
+                            }
+                        }
+                    })
+                }
+
+            });
+        });
+    </script>
 
 @endsection
